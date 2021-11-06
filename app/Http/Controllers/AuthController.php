@@ -59,7 +59,7 @@ class AuthController extends BaseController
 
             $user = User::with('favorites')->where('email', $request->email)->first();
             if (!Hash::check($request->password, $user->password)) {
-                return $this->sendError('password is incorrect', 500, ['password' => "Password is incorrect"]);
+                return $this->sendError('password is incorrect', 403, ['password' => "Password is incorrect"]);
             }
             $token = $user->createToken('auth-token');
             $user['auth_token'] = $token->plainTextToken;
