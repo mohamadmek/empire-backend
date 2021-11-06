@@ -2,6 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\FavoriteController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +16,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::prefix('auth')->group(function () {
+    Route::post('/register', [AuthController::class, 'register']);
+    Route::post('/login', [AuthController::class, 'login']);
+});
+
+Route::middleware('auth:sanctum')->group( function () {
+    Route::post('/auth/updateUser', [AuthController::class, 'updateUser']);
+    Route::post('/auth/logout', [AuthController::class, 'logout']);
+    Route::get('/auth/getUserWithToken', [AuthController::class, 'getUserWithToken']);
+
+    Route::post('/addFavorite', [FavoriteController::class, 'store']);
+    Route::post('/deleteFavorite', [FavoriteController::class, 'destroy']);
+
 });
